@@ -1,18 +1,20 @@
-# Project Title
+# 2022 FIFA World Cup Player Performance Analysis
 
-Write a 1-2 sentences that quickly and clearly convey what your repo is for.
+This repository analyzes player performance from the 2022 FIFA World Cup using publicly available data from FBref. The goal is to explore key performance metrics through visualization and summary statistics.
 
 ## Overview
 
-Expand on those introductory sentences with a brief but informative description of your project's purpose and goals. This section should help visitors decide whether they should dig deeper into your repo/project.
+This project focuses on analyzing soccer player performance data from the 2022 World Cup. Using R and tidyverse tools, we clean and transform the dataset to analyze variables such as goals, appearances, and other available statistics. The main objective is to create clear visualizations and summary statistics that show patterns in player performance and help us better understand what contributes to success.
 
-### Interesting Insight (Optional)
+### Interesting Insight
 
 This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with `{ggplot2}` by using the function `ggsave`.
 
 ## Data Sources and Acknowledgements
 
-Be sure to list where you got any data used within the project. Be sure to acknowledge any one whose work or elements you're drawing upon.
+The data used in this project comes from FBref’s World Cup statistics page:
+https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats 
+We also used course materials, instructor guidance, and R packages such as tidyverse for data wrangling and visualization.
 
 ## Current Plan
 
@@ -25,4 +27,4 @@ Use this section to explain the structure of your repo. This should help visitor
 
 ## Authors
 
-Give information about who are the authors of the project and how people can get in touch if they have questions.
+This project was completed by Riya Dsouza, Ryland Jones, and Chenjian Wei. For any questions or further information, please reach out to the repository contributors through GitHub, or at rad5963@psu.edu, rmj5670@psu.edu, or cpw5679@psu.edu.
