@@ -14,6 +14,7 @@ This is optional but highly recommended. You'll include one interesting insight 
 
 The data used in this project comes from FBref’s World Cup statistics page:
 https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats 
+
 We also used course materials, instructor guidance, and R packages such as tidyverse for data wrangling and visualization.
 
 ## Current Plan
