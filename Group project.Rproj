@@ -1,13 +1,61 @@
-Version: 1.0
 
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
+# 2022 World Cup Data ----
+## Get data from the 2022 World Cup and create plots showing statistics by
+## team vs average team age
 
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
+# Step 1: Load Packages ----
+## Needed Packages: tidyverse, knitr, rvest, kableExtra, readxl
+library(tidyverse)
+library(knitr)
+library(rvest)
+library(kableExtra)
+library(readxl)
 
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
+# Step 2: Load Data ----
+## Needed data: World Cup Team Data
+
+worldCupRaw <- read_xlsx("/Users/riyadsouza/Downloads/worldCup.xlsx")
+
+View(worldCupRaw)
+# Step 3: Tidy the dataset ----
+library(tidyverse)
+library(janitor)
+
+worldCupClean <- worldCupRaw %>%
+  
+  clean_names() %>%
+  
+  filter(
+    !is.na(squad),
+    squad != "Squad",
+    !str_detect(squad, "Playing")
+  ) %>%
+  
+  select(
+    squad,
+    players = number_pl,
+    age,
+    poss,
+    matches_played = mp,
+    starts,
+    minutes = min,
+    nineties = x90s,
+    goals = gls_9,
+    assists = ast_10,
+    goals_plus_assists = g_a_11,
+    goals_no_pk = g_pk_12,
+    pk,
+    pkatt = p_katt,
+    yellow_cards = crd_y,
+    red_cards = crd_r
+  ) %>%
+  
+  mutate(across(-squad, as.numeric))
+
+View(worldCupClean)
+
+# Step 4: short description ----
+
+## Step 4A: short description ----
+
+## Step 4B: short description ----
