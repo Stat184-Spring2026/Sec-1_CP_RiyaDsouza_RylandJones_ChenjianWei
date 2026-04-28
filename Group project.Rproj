@@ -4,7 +4,8 @@
 ## team vs average team age
 
 # Step 1: Load Packages ----
-## Needed Packages: tidyverse, knitr, rvest, kableExtra, readxl
+## Needed Packages: tidyverse, knitr, rvest, kableExtra, readxl, janitor
+library(tidyverse)
 library(knitr)
 library(rvest)
 library(kableExtra)
