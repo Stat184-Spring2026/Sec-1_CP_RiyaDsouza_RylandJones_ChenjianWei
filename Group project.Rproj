@@ -10,6 +10,7 @@ library(knitr)
 library(rvest)
 library(kableExtra)
 library(readxl)
+library(janitor)
 
 # Step 2: Load Data ----
 ## Needed data: World Cup Team Data
@@ -18,8 +19,7 @@ worldCupRaw <- read_xlsx("/Users/riyadsouza/Downloads/worldCup.xlsx")
 
 View(worldCupRaw)
 # Step 3: Tidy the dataset ----
-library(tidyverse)
-library(janitor)
+
 
 worldCupClean <- worldCupRaw %>%
   
