@@ -2,15 +2,21 @@
 # Goal: Compare team statistics vs average team age
 
 # Step 1: Load Packages ----
+## Needed Packages: tidyverse, knitr, rvest, kableExtra, readxl, janitor,
+##                  dplyr, kableExtra
 library(tidyverse)
 library(knitr)
 library(rvest)
 library(kableExtra)
 library(readxl)
 library(janitor)
+library(dplyr)
+library(kableExtra)
 
 # Step 2: Load Data ----
 worldCupRaw <- read_xlsx("/Users/riyadsouza/Downloads/worldCup.xlsx")
+
+worldCupRaw <- read_xlsx("/Users/rythe/Downloads/worldCup2022.xlsx")
 
 # Step 3: Tidy the dataset ----
 worldCupClean <- worldCupRaw %>%
@@ -48,13 +54,19 @@ worldCupClean <- worldCupRaw %>%
 View(worldCupClean)
 
 # Step 4: Create a Plot ----
+
+psuPalette <- c(
+  "#1E407C", "#BC204B", "#3EA39E", "#E98300",
+  "#999999", "#AC8DCE", "#F2665E", "#99CC00"
+) 
+
 ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = poss)) +
   
   geom_point(size = 3) +
   
   geom_smooth(method = "lm", se = FALSE, color = "black") +
   
-  scale_color_gradient(low = "green", high = "darkblue") +
+  scale_color_gradient(low = "#999999", high = "#BC204B") +
   
   labs(
     title = "Age vs Performance",
@@ -69,16 +81,13 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = poss)) +
     aes(label = squad),
     vjust = -1,
     size = 4
-  )
+  ) +
   
   theme_minimal()
   
   ggsave("worldcup_plot.png", width = 8, height = 5)
   
   # Step 4: Create a Table ----
-  
-  library(dplyr)
-  library(knitr)
   
   avg_perf <- mean(worldCupClean$goals_plus_assists)
   avg_poss <- mean(worldCupClean$poss)
@@ -99,8 +108,6 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = poss)) +
       `Performance vs Avg` = Performance_vs_Avg,
       `Possession vs Avg` = Possession_vs_Avg
     )
-  
-  library(kableExtra)
   
   kable(
     top_table,
