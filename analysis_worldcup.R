@@ -54,7 +54,7 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = poss)) +
   
   geom_smooth(method = "lm", se = FALSE, color = "black") +
   
-  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  scale_color_gradient(low = "green", high = "darkblue") +
   
   labs(
     title = "Age vs Performance",
