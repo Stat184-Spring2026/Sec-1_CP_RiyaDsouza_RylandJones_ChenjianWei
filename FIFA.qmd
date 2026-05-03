@@ -1,0 +1,164 @@
+---
+title: "FIFA World Cup 2022 Analysis"
+subtitle: "Final Group Project"
+author: "Chenjian Wei, Riyadsouza, RylandJones"
+date: "May 3, 2026"
+format:
+  pdf:
+    toc: false
+    number-sections: true
+    colorlinks: true
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(gt)
+
+worldCupRaw <- read_xlsx("worldCup2022.xlsx")
+
+worldCupClean <- worldCupRaw |>
+  clean_names() |>
+  filter(
+    !is.na(squad),
+    squad != "Squad",
+    !str_detect(squad, "Playing")
+  ) |>
+  select(
+    squad,
+    players = number_pl,
+    matches_played = mp,
+    goals = gls_9
+  )
+top8 <- worldCupClean |>
+  filter(matches_played >= 5) |>
+  mutate(
+    goals = as.numeric(goals),
+    matches_played = as.numeric(matches_played),
+    players = as.numeric(players),
+    avg_goals = goals / matches_played
+  )
+
+```
+
+## Introduction
+
+This project uses player level data from the 2022 FIFA World Cup to examine how different performance variables relate to overall effectiveness. In addition to analyzing raw statistics like goals, assists, and minutes played, we will also use per-90 metrics to allow for fair comparisons between players with different playing time. The project involves cleaning and organizing the dataset, generating visualizations to compare players and trends, and computing summary statistics to identify relationships between variables.
+
+## Tidy data
+
+The dataset was cleaned to follow tidy data principles, where each variable is a column and each row represents a team.\
+\
+First, \`clean_names()\` was used to make all column names consistent and easier to use. Then, unnecessary rows were removed, including rows with missing team names and rows that were not actual teams, such as those labeled "Squad" or "Playing".\
+\
+Next, only important variables were kept, such as team name, age, matches played, and goals. Some columns were also renamed to make them more clear, for example, \`mp\` was renamed to \`matches_played\` and \`gls_9\` to \`goals\`.\
+\
+After these steps, the dataset became cleaner, easier to understand, and ready for further analysis.
+
+## Plot and Table
+
+```{r}
+#| echo: false
+#| label: fig-players-goals
+#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| fig-pos: H
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(gt)
+
+worldCupRaw <- read_xlsx("worldCup2022.xlsx")
+
+worldCupClean <- worldCupRaw |>
+  clean_names() |>
+  filter(
+    !is.na(squad),
+    squad != "Squad",
+    !str_detect(squad, "Playing")
+  ) |>
+  select(
+    squad,
+    players = number_pl,
+    matches_played = mp,
+    goals = gls_9
+  ) |>
+  mutate(
+    players = as.numeric(players),
+    matches_played = as.numeric(matches_played),
+    goals = as.numeric(goals),
+    avg_goals = goals / matches_played
+  )
+
+top8 <- worldCupClean |>
+  filter(matches_played >= 5) |>
+  arrange(desc(avg_goals)) |>
+  slice_head(n = 8)
+
+ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
+  geom_point(size = 4) +
+  labs(
+    title = "Top 8 World Cup Teams - Players and Average Goals",
+    x = "Number of Players",
+    y = "Goals per Match",
+    color = "Team"
+  ) +
+  theme_minimal()
+```
+
+@fig-players-goals shows the relationship between the number of players and the average goals per match for the top 8 teams. From the scatter plot, there does not appear to be a strong linear relationship between team size and scoring performance. Some teams with a moderate number of players, such as England and Portugal, achieve relatively high average goals, while others with similar or even higher player counts do not perform as well. This suggests that simply having more players does not necessarily lead to better offensive outcomes.
+
+```{r}
+#| echo: false
+#| label: tbl-top8
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+
+top8 |>
+  select(
+    Team = squad,
+    players,
+    `Goals per Match` = avg_goals
+  ) |>
+  mutate(
+    Rank = row_number(),
+    players = round(players, 0),
+    `Goals per Match` = round(`Goals per Match`, 2)
+  ) |>
+  select(Rank, Team, players, `Goals per Match`) |>
+  gt() |>
+  tab_header(
+    title = "Top 8 World Cup Teams - Average Goals Performance"
+  )
+```
+
+@tbl-top8 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
+
+## Conclusion
+
+## Reference
+
+“2022 World Cup Stats.” *FBref.com*, Sports Reference, <https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats>. Accessed 3 May 2026.
+
+## Author Contributions
+
+Chenjian Wei:\
+Riyadsouza:\
+RylandJones:
+
+## Code Appendix
+
+```{r}
+#| label: codeAppend
+#| ref-label: !expr knitr::all_labels()
+#| echo: true
+#| eval: false
+
+```
