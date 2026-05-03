@@ -34,28 +34,15 @@ worldCupClean <- worldCupRaw |>
   select(
     squad,
     players = number_pl,
-    age,
-    poss,
     matches_played = mp,
-    starts,
-    minutes = min,
-    nineties = x90s,
-    goals = gls_9,
-    assists = ast_10,
-    goals_plus_assists = g_a_11,
-    goals_no_pk = g_pk_12,
-    pk,
-    pkatt = p_katt,
-    yellow_cards = crd_y,
-    red_cards = crd_r
+    goals = gls_9
   )
-
 top8 <- worldCupClean |>
   filter(matches_played >= 5) |>
   mutate(
     goals = as.numeric(goals),
     matches_played = as.numeric(matches_played),
-    age = as.numeric(age),
+    players = as.numeric(players),
     avg_goals = goals / matches_played
   )
 
@@ -79,13 +66,14 @@ After these steps, the dataset became cleaner, easier to understand, and ready f
 
 ```{r}
 #| echo: false
-#| label: fig-age-goals
-#| fig-cap: "Top 8 team Average goals per match by team average age"
+#| label: fig-players-goals
+#| fig-cap: "Top 8 team Average goals per match by team number of players"
 #| fig-pos: H
 library(tidyverse)
 library(readxl)
 library(janitor)
 library(ggplot2)
+library(gt)
 
 worldCupRaw <- read_xlsx("worldCup2022.xlsx")
 
@@ -98,33 +86,34 @@ worldCupClean <- worldCupRaw |>
   ) |>
   select(
     squad,
-    age,
+    players = number_pl,
     matches_played = mp,
     goals = gls_9
+  ) |>
+  mutate(
+    players = as.numeric(players),
+    matches_played = as.numeric(matches_played),
+    goals = as.numeric(goals),
+    avg_goals = goals / matches_played
   )
 
 top8 <- worldCupClean |>
   filter(matches_played >= 5) |>
-  mutate(
-    goals = as.numeric(goals),
-    matches_played = as.numeric(matches_played),
-    age = as.numeric(age),
-    avg_goals = goals / matches_played
-  )
+  arrange(desc(avg_goals)) |>
+  slice_head(n = 8)
 
-ggplot(top8, aes(x = age, y = avg_goals, color = squad)) +
+ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
   geom_point(size = 4) +
   labs(
-    x = "Average Age",
+    title = "Top 8 World Cup Teams - Players and Average Goals",
+    x = "Number of Players",
     y = "Goals per Match",
-    color = "Country"
+    color = "Team"
   ) +
   theme_minimal()
 ```
 
-@fig-age-goals illustrates the relationship between average team age and goals per match. The scatter plot suggests that there is no clear linear relationship between age and scoring performance. While some older teams achieve high scoring rates, others do not, indicating that age alone is not a strong predictor of offensive success.
-
-These results suggest that additional factors, such as team strategy, player skill, and match conditions, may play a more important role in determining scoring performance than average age alone.
+@fig-players-goals shows the relationship between the number of players and the average goals per match for the top 8 teams. From the scatter plot, there does not appear to be a strong linear relationship between team size and scoring performance. Some teams with a moderate number of players, such as England and Portugal, achieve relatively high average goals, while others with similar or even higher player counts do not perform as well. This suggests that simply having more players does not necessarily lead to better offensive outcomes.
 
 ```{r}
 #| echo: false
@@ -133,28 +122,24 @@ These results suggest that additional factors, such as team strategy, player ski
 #| tbl-pos: H
 
 top8 |>
-  mutate(Rank = row_number()) |>
-  select(Rank, squad, age, avg_goals) |>
+  select(
+    Team = squad,
+    players,
+    `Goals per Match` = avg_goals
+  ) |>
+  mutate(
+    Rank = row_number(),
+    players = round(players, 0),
+    `Goals per Match` = round(`Goals per Match`, 2)
+  ) |>
+  select(Rank, Team, players, `Goals per Match`) |>
   gt() |>
-  cols_label(
-    squad = "Team",
-    age = "Age",
-    avg_goals = "Goals per Match"
-  ) |>
   tab_header(
-    title = "Top 8 World Cup Teams"
-  ) |>
-  fmt_number(
-    columns = c(age, avg_goals),
-    decimals = 2
-  ) |>
-  cols_align(align = "center") |>
-  opt_row_striping()
+    title = "Top 8 World Cup Teams - Average Goals Performance"
+  )
 ```
 
-@tbl-top8 summarizes the key statistics for the selected teams that played at least five matches in the 2022 FIFA World Cup. The table presents team average age and goals per match, allowing for comparison across teams with different levels of performance.
-
-Overall, teams such as England and France show relatively high goals per match, while others like Croatia and Morocco demonstrate lower scoring output. This variation highlights differences in offensive effectiveness among the top-performing teams.
+@tbl-top8 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
 
 ## Conclusion
 
@@ -237,15 +222,15 @@ top8 <- worldCupClean |>
   mutate(
     goals = as.numeric(goals),
     matches_played = as.numeric(matches_played),
-    age = as.numeric(age),
+    players = as.numeric(players),
     avg_goals = goals / matches_played
   )
 
-ggplot(top8, aes(x = age, y = avg_goals, color = squad)) +
+ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
   geom_point(size = 4) +
   labs(
-    title = "Average Goals vs Age for Top 8 Teams",
-    x = "Average Age",
+    title = "Average Goals vs number of players for Top 8 Teams",
+    x = "number of player",
     y = "Goals per Match",
     color = "Country"
   ) +
@@ -253,18 +238,18 @@ ggplot(top8, aes(x = age, y = avg_goals, color = squad)) +
 ## Step 4A: Make a table ----
 top8 |>
   mutate(Rank = row_number()) |>
-  select(Rank, squad, age, avg_goals) |>
+  select(Rank, squad, players, avg_goals) |>
   gt() |>
   cols_label(
     squad = "Team",
-    age = "Age",
+    players = "players",
     avg_goals = "Goals per Match"
   ) |>
   tab_header(
     title = "Top 8 World Cup Teams - Average Goals Performance"
   ) |>
   fmt_number(
-    columns = c(age, avg_goals),
+    columns = c(players, avg_goals),
     decimals = 2
   ) |>
   cols_align(align = "center") |>
