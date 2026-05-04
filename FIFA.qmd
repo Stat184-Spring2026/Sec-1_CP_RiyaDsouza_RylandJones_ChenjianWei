@@ -1,7 +1,7 @@
 ---
 title: "FIFA World Cup 2022 Analysis"
 subtitle: "Final Group Project"
-author: "Chenjian Wei, Riyadsouza, RylandJones"
+author: "Chenjian Wei, Riya Dsouza, Ryland Jones"
 date: "May 3, 2026"
 format:
   pdf:
@@ -14,38 +14,68 @@ execute:
 ---
 
 ```{r}
+#| label: setup
+#| message: false
+#| warning: false
 #| echo: false
 
+# Load packages
 library(tidyverse)
+library(knitr)
+library(rvest)
+library(kableExtra)
 library(readxl)
 library(janitor)
-library(ggplot2)
-library(gt)
+library(ggrepel)
+library(viridis)
+```
+
+```{r}
+#| label: load-data
+#| message: false
+#| warning: false
+#| echo: false
 
 worldCupRaw <- read_xlsx("worldCup2022.xlsx")
+```
 
-worldCupClean <- worldCupRaw |>
-  clean_names() |>
+```{r}
+#| label: clean-data
+#| message: false
+#| warning: false
+#| echo: false
+
+worldCupClean <- worldCupRaw %>%
+  
+  clean_names() %>%
+  
   filter(
     !is.na(squad),
     squad != "Squad",
     !str_detect(squad, "Playing")
-  ) |>
+  ) %>%
+  
   select(
     squad,
     players = number_pl,
+    age,
+    poss,
     matches_played = mp,
-    goals = gls_9
-  )
-top8 <- worldCupClean |>
-  filter(matches_played >= 5) |>
-  mutate(
-    goals = as.numeric(goals),
-    matches_played = as.numeric(matches_played),
-    players = as.numeric(players),
-    avg_goals = goals / matches_played
-  )
-
+    starts,
+    minutes = min,
+    nineties = x90s,
+    goals = gls_9,
+    assists = ast_10,
+    goals_plus_assists = g_a_11,
+    goals_no_pk = g_pk_12,
+    pk,
+    pkatt = p_katt,
+    yellow_cards = crd_y,
+    red_cards = crd_r
+  ) %>%
+  
+  mutate(across(-squad, ~as.numeric(as.character(.)))) %>%
+  drop_na(age, goals_plus_assists)
 ```
 
 ## Introduction
@@ -66,50 +96,26 @@ After these steps, the dataset became cleaner, easier to understand, and ready f
 
 ```{r}
 #| echo: false
-#| label: fig-players-goals
+#| label: fig-playersVsPerformance
 #| fig-cap: "Top 8 team Average goals per match by team number of players"
 #| fig-pos: H
-library(tidyverse)
-library(readxl)
-library(janitor)
-library(ggplot2)
-library(gt)
-
-worldCupRaw <- read_xlsx("worldCup2022.xlsx")
-
-worldCupClean <- worldCupRaw |>
-  clean_names() |>
-  filter(
-    !is.na(squad),
-    squad != "Squad",
-    !str_detect(squad, "Playing")
-  ) |>
-  select(
-    squad,
-    players = number_pl,
-    matches_played = mp,
-    goals = gls_9
-  ) |>
-  mutate(
-    players = as.numeric(players),
-    matches_played = as.numeric(matches_played),
-    goals = as.numeric(goals),
-    avg_goals = goals / matches_played
-  )
-
-top8 <- worldCupClean |>
-  filter(matches_played >= 5) |>
-  arrange(desc(avg_goals)) |>
-  slice_head(n = 8)
-
-ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
-  geom_point(size = 4) +
+#| fig-height: 5
+ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
   labs(
-    title = "Top 8 World Cup Teams - Players and Average Goals",
+    title = "Number of Players vs Performance",
     x = "Number of Players",
-    y = "Goals per Match",
+    y = "Goals + Assists",
     color = "Team"
   ) +
+  geom_text_repel(
+    data = worldCupClean %>% slice_max(goals_plus_assists, n = 10),
+    aes(label = squad),
+    size = 4,
+    max.overlaps = Inf
+  ) +
+  scale_color_viridis_d(option = "D") +
   theme_minimal()
 ```
 
@@ -117,29 +123,265 @@ ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
 
 ```{r}
 #| echo: false
-#| label: tbl-top8
+#| label: tbl-playersVsPerformance1
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
+avg_perf <- mean(worldCupClean$goals_plus_assists)
+avg_players <- mean(worldCupClean$players)
 
-top8 |>
-  select(
-    Team = squad,
-    players,
-    `Goals per Match` = avg_goals
-  ) |>
+top_table <- worldCupClean %>%
+  arrange(desc(goals_plus_assists)) %>%
   mutate(
     Rank = row_number(),
-    players = round(players, 0),
-    `Goals per Match` = round(`Goals per Match`, 2)
-  ) |>
-  select(Rank, Team, players, `Goals per Match`) |>
-  gt() |>
-  tab_header(
-    title = "Top 8 World Cup Teams - Average Goals Performance"
+    Performance_vs_Avg = round(goals_plus_assists - avg_perf, 1),
+    Players_vs_Avg = round(players - avg_players, 1),
+  ) %>%
+  select(
+    Rank,
+    Team = squad,
+    Players = players,
+    `Goals + Assists` = goals_plus_assists,
+    `Performance vs Avg` = Performance_vs_Avg,
+    `Players vs Avg` = Players_vs_Avg,
+  )
+
+kable(
+  top_table,
+  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Number of Players</span>",
+  escape = FALSE
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
 
-@tbl-top8 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
+```{r}
+#| echo: false
+#| label: tbl-playersVsPerformance2
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
+
+model <- lm(goals_plus_assists ~ players, data = worldCupClean)
+
+simple_table <- data.frame(
+  Metric = c("Average Number of Players", 
+             "Average Goals + Assists", 
+             "Correlation (Number of Players vs Performance)", 
+             "Slope (Number of Players Effect)"),
+  
+  Value = c(round(avg_players, 2),
+            round(avg_perf, 2),
+            round(corr, 2),
+            round(coef(model)[2], 2))
+)
+
+kable(
+  simple_table,
+  caption = "Impact of The Number of Players on Offensive Performance",
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+@tbl-playersVsPerformance1 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
+
+```{r}
+#| echo: false
+#| label: fig-ageVsPerformance
+#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| fig-pos: H
+#| fig-height: 5
+ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
+  
+  geom_point(size = 3) +
+  
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  
+  labs(
+    title = "Age vs Performance",
+    x = "Average Team Age",
+    y = "Goals + Assists",
+    color = "Team"
+  ) +
+  
+  geom_text_repel(
+    data = worldCupClean %>% slice_max(goals_plus_assists, n = 10),
+    aes(label = squad),
+    size = 4,
+    max.overlaps = Inf
+  ) +
+  
+  scale_color_viridis_d(option = "D") +
+  
+  theme_minimal()
+```
+
+```{r}
+#| echo: false
+#| label: tbl-ageVsPerformance1
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+avg_perf <- mean(worldCupClean$goals_plus_assists)
+avg_age <- mean(worldCupClean$age)
+
+top_table <- worldCupClean %>%
+  arrange(desc(goals_plus_assists)) %>%
+  mutate(
+    Rank = row_number(),
+    Performance_vs_Avg = round(goals_plus_assists - avg_perf, 1),
+    Age_vs_Avg = round(age - avg_age, 1),
+  ) %>%
+  select(
+    Rank,
+    Team = squad,
+    Age = age,
+    `Goals + Assists` = goals_plus_assists,
+    `Performance vs Avg` = Performance_vs_Avg,
+    `Age vs Avg` = Age_vs_Avg,
+  )
+
+kable(
+  top_table,
+  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Top World Cup Teams- Offensive Performance and Possession Compared to Average</span>",
+  escape = FALSE
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+```{r}
+#| echo: false
+#| label: tbl-ageVsPerformance2
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
+
+model <- lm(goals_plus_assists ~ players, data = worldCupClean)
+
+simple_table <- data.frame(
+  Metric = c("Average Number of Players", 
+             "Average Goals + Assists", 
+             "Correlation (Number of Players vs Performance)", 
+             "Slope (Number of Players Effect)"),
+  
+  Value = c(round(avg_players, 2),
+            round(avg_perf, 2),
+            round(corr, 2),
+            round(coef(model)[2], 2))
+)
+
+kable(
+  simple_table,
+  caption = "Impact of The Number of Players on Offensive Performance",
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+```{r}
+#| echo: false
+#| label: fig-possessionVsPerformance
+#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| fig-pos: H
+#| fig-height: 5
+ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs(
+    title = "Possession vs Performance",
+    x = "Possession Percentage",
+    y = "Goals + Assists",
+    color = "Team"
+  ) +
+  geom_text_repel(
+    data = worldCupClean %>% slice_max(goals_plus_assists, n = 10),
+    aes(label = squad),
+    size = 4,
+    max.overlaps = Inf
+  ) +
+  scale_color_viridis_d(option = "D") +
+  theme_minimal()
+```
+
+```{r}
+#| echo: false
+#| label: tbl-possessionVsPerformance1
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+avg_perf <- mean(worldCupClean$goals_plus_assists)
+avg_poss <- mean(worldCupClean$poss)
+
+top_table <- worldCupClean %>%
+  arrange(desc(goals_plus_assists)) %>%
+  mutate(
+    Rank = row_number(),
+    Performance_vs_Avg = round(goals_plus_assists - avg_perf, 1),
+    Poss_vs_Avg = round(poss - avg_poss, 1),
+  ) %>%
+  select(
+    Rank,
+    Team = squad,
+    Possession = poss,
+    `Goals + Assists` = goals_plus_assists,
+    `Performance vs Avg` = Performance_vs_Avg,
+    `Possession vs Avg` = Poss_vs_Avg,
+  )
+
+kable(
+  top_table,
+  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Possession Percentage</span>",
+  escape = FALSE
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+```{r}
+#| echo: false
+#| label: tbl-possessionVsPerformance2
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+corr <- cor(worldCupClean$poss, worldCupClean$goals_plus_assists)
+
+model <- lm(goals_plus_assists ~ poss, data = worldCupClean)
+
+simple_table <- data.frame(
+  Metric = c("Average Possession", 
+             "Average Goals + Assists", 
+             "Correlation (Possession vs Performance)", 
+             "Slope (Possession Effect)"),
+  
+  Value = c(round(avg_poss, 2),
+            round(avg_perf, 2),
+            round(corr, 2),
+            round(coef(model)[2], 2))
+)
+
+kable(
+  simple_table,
+  caption = "Impact of Possession on Offensive Performance",
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
 
 ## Conclusion
 
@@ -156,102 +398,9 @@ RylandJones:
 ## Code Appendix
 
 ```{r}
+#| label: codeAppend
+#| ref-label: !expr knitr::all_labels()
 #| echo: true
 #| eval: false
 
-# Style Guide: tidyverse style guide
-# Primary Author: 
-# Reviewer: 
-
-# 2022 World Cup Data ----
-## Get data from the 2022 World Cup and create plots showing statistics by
-## team vs average team age
-
-# Step 1: Load Packages ----
-## Needed Packages: tidyverse, knitr, rvest, kableExtra, readxl
-install.packages("readxl")
-install.packages("gt")
-library(tidyverse)
-library(knitr)
-library(rvest)
-library(kableExtra)
-library(readxl)
-library(janitor)
-library(dplyr)
-library(gt)
-library(ggplot2)
-# Step 2: Load Data ----
-## Needed data: World Cup Team Data
-
-worldCupRaw <- read_xlsx("worldCup2022.xlsx")
-
-View(worldCupRaw)
-# Step 3: Tidy the data ----
-worldCupClean <- worldCupRaw |>
-  
-  clean_names() |>
-  
-  filter(
-    !is.na(squad),
-    squad != "Squad",
-    !str_detect(squad, "Playing")
-  ) |>
-  
-  select(
-    squad,
-    players = number_pl,
-    age,
-    poss,
-    matches_played = mp,
-    starts,
-    minutes = min,
-    nineties = x90s,
-    goals = gls_9,
-    assists = ast_10,
-    goals_plus_assists = g_a_11,
-    goals_no_pk = g_pk_12,
-    pk,
-    pkatt = p_katt,
-    yellow_cards = crd_y,
-    red_cards = crd_r
-  )
-  
-# Step 4: Make a plot ----
-top8 <- worldCupClean |>
-  filter(matches_played >= 5) |>
-  mutate(
-    goals = as.numeric(goals),
-    matches_played = as.numeric(matches_played),
-    players = as.numeric(players),
-    avg_goals = goals / matches_played
-  )
-
-ggplot(top8, aes(x = players, y = avg_goals, color = squad)) +
-  geom_point(size = 4) +
-  labs(
-    title = "Average Goals vs number of players for Top 8 Teams",
-    x = "number of player",
-    y = "Goals per Match",
-    color = "Country"
-  ) +
-  theme_minimal()
-## Step 4A: Make a table ----
-top8 |>
-  mutate(Rank = row_number()) |>
-  select(Rank, squad, players, avg_goals) |>
-  gt() |>
-  cols_label(
-    squad = "Team",
-    players = "players",
-    avg_goals = "Goals per Match"
-  ) |>
-  tab_header(
-    title = "Top 8 World Cup Teams - Average Goals Performance"
-  ) |>
-  fmt_number(
-    columns = c(players, avg_goals),
-    decimals = 2
-  ) |>
-  cols_align(align = "center") |>
-  opt_row_striping()
 ```
