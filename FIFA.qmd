@@ -98,10 +98,12 @@ This project uses an exploratory data analysis paradigm, since the goal is to ex
 
 ## Cases and Variables
 
-In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament. The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance. Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
+In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament.
+The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance.
+Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
+
 
 ## Summary Statistics
-
 ```{r}
 #| echo: false
 #| label: tbl-descriptive-stats
@@ -129,7 +131,6 @@ worldCupClean %>%
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
-
 The summary statistics in @tbl-descriptive-stats give an overview of the dataset. On average, teams have about 9 goals plus assists, with a median of 7. The values range from 1 to 28, showing that team performance varies a lot. The standard deviation also shows there is a wide spread in performance. The average team age is about 27 years, the average number of players is around 21, and average possession is close to 49%. Overall, team characteristics are fairly similar, but performance differs across teams.
 
 ## Plot and Table
@@ -164,7 +165,7 @@ The scatter plot in @fig-players-vs-performance shows the relationship between t
 ```{r}
 #| echo: false
 #| label: tbl-players-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Players and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_players <- mean(worldCupClean$players)
@@ -187,7 +188,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Number of Players</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -197,10 +197,12 @@ kable(
   )
 ```
 
+The table in @tbl-playersVsPerformance1 suggests a moderately positive correlation between the number of players and team performance, meaning that teams with more players tend to have higher goals and assists. However, there are some outliers where teams do not follow this pattern.
+
 ```{r}
 #| echo: false
 #| label: tbl-players-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Number of Players vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
 
@@ -219,8 +221,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of The Number of Players on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -229,7 +230,8 @@ kable(
   )
 ```
 
-@tbl-players-vs-performance-1 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
+The table in @tbl-playersVsPerformance2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are still some outliers, meaning not all teams follow this pattern exactly.
+
 
 ```{r}
 #| echo: false
@@ -262,10 +264,12 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
+The scatter plot in @fig-ageVsPerformance shows the relationship between average team age and team performance (goals + assists). The downward sloping line suggests a slightly negative relationship, meaning that teams with higher average ages tend to have lower performance. However, this trend is not very strong, as there are several teams that do not follow this pattern. For example, some teams with average ages around 27–28 still perform well. Overall, this suggests that age may have a small effect on performance, but it is not a major factor.
+
 ```{r}
 #| echo: false
 #| label: tbl-age-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Average Age and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_age <- mean(worldCupClean$age)
@@ -288,7 +292,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Top World Cup Teams- Offensive Performance and Possession Compared to Average</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -298,10 +301,12 @@ kable(
   )
 ```
 
+The table in @tbl-ageVsPerformance1 shows how team performance compares to average alongside team age. The top-performing teams, such as France, England, and Argentina, have ages close to the overall average, with only small differences. The “Age vs Avg” column shows that both higher and lower performing teams can have ages above or below the average. Overall, this suggests that team age does not have a strong or consistent impact on performance.
+
 ```{r}
 #| echo: false
 #| label: tbl-age-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Average Age vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$age, worldCupClean$goals_plus_assists)
 
@@ -320,8 +325,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of The Number of Players on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -329,6 +333,8 @@ kable(
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
+
+The table in @tbl-ageVsPerformance2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are some outliers where teams do not follow this pattern exactly.
 
 ```{r}
 #| echo: false
@@ -355,10 +361,12 @@ ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
+The scatter plot in @fig-possessionVsPerformance shows the relationship between possession percentage and team performance (goals + assists). The upward sloping line indicates a positive relationship, meaning that teams with higher possession tend to have higher offensive performance. Several top-performing teams, such as France, England, and Portugal, have relatively high possession values. However, there are still some teams that do not follow this pattern exactly. Overall, this suggests that possession is moderately associated with better performance.
+
 ```{r}
 #| echo: false
 #| label: tbl-possession-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Possession Percentage and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_poss <- mean(worldCupClean$poss)
@@ -381,7 +389,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Possession Percentage</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -391,10 +398,12 @@ kable(
   )
 ```
 
+The table in @tbl-possessionVsPerformance1 shows how team performance compares to average alongside possession percentage. The top-performing teams, such as France, England, and Argentina, generally have possession values above or close to the average. The “Possession vs Avg” column shows that teams with higher possession often perform above average, while teams with lower possession tend to perform worse. Overall, this supports a moderately positive relationship between possession and offensive performance.
+
 ```{r}
 #| echo: false
 #| label: tbl-possession-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Possession Percentage vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$poss, worldCupClean$goals_plus_assists)
 
@@ -413,8 +422,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of Possession on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -423,7 +431,7 @@ kable(
   )
 ```
 
-The table in @tbl-possession-vs-performance-2 summarizes the overall relationship between possession and team performance. The correlation value of 0.43 indicates a moderately positive relationship, meaning that teams with higher possession tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as possession increases. Overall, this suggests that possession has a moderate influence on offensive performance.
+The table in @tbl-possessionVsPerformance2 summarizes the overall relationship between possession and team performance. The correlation value of 0.43 indicates a moderately positive relationship, meaning that teams with higher possession tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as possession increases. Overall, this suggests that possession has a moderate influence on offensive performance.
 
 ## Data Source & Ethics
 
