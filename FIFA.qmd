@@ -102,6 +102,36 @@ In this dataset, a case represents a single World Cup team. Each row corresponds
 The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance.
 Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
 
+
+## Summary Statistics
+```{r}
+#| echo: false
+#| label: tbl-descriptive-stats
+#| tbl-cap: "Summary Statistics of Key Variables"
+#| tbl-pos: H
+
+worldCupClean %>%
+  summarize(
+    avg_goals = mean(goals_plus_assists, na.rm = TRUE),
+    median_goals = median(goals_plus_assists, na.rm = TRUE),
+    min_goals = min(goals_plus_assists, na.rm = TRUE),
+    max_goals = max(goals_plus_assists, na.rm = TRUE),
+    sd_goals = sd(goals_plus_assists, na.rm = TRUE),
+    
+    avg_age = mean(age, na.rm = TRUE),
+    avg_players = mean(players, na.rm = TRUE),
+    avg_poss = mean(poss, na.rm = TRUE)
+  ) %>%
+  kable(
+    caption = "Summary Statistics of Team Performance"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
 ## Plot and Table
 
 ```{r}
