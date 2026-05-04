@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 ---
 title: "FIFA World Cup 2022 Analysis"
 subtitle: "Final Group Project"
@@ -170,7 +169,6 @@ Riyadsouza:\
 RylandJones:
 
 ## Code Appendix
-=======
 ---
 title: "FIFA World Cup 2022 Analysis"
 subtitle: "Final Group Project"
@@ -632,4 +630,5 @@ RylandJones:
 #| eval: false
 
 ```
->>>>>>> Stashed changes
+
+
