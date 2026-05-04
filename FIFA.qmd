@@ -131,6 +131,7 @@ worldCupClean %>%
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
+The summary statistics in @tbl-descriptive-stats give an overview of the dataset. On average, teams have about 9 goals plus assists, with a median of 7. The values range from 1 to 28, showing that team performance varies a lot. The standard deviation also shows there is a wide spread in performance. The average team age is about 27 years, the average number of players is around 21, and average possession is close to 49%. Overall, team characteristics are fairly similar, but performance differs across teams.
 
 ## Plot and Table
 
@@ -159,7 +160,7 @@ ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
-@fig-players-goals shows the relationship between the number of players and the average goals per match for the top 8 teams. From the scatter plot, there does not appear to be a strong linear relationship between team size and scoring performance. Some teams with a moderate number of players, such as England and Portugal, achieve relatively high average goals, while others with similar or even higher player counts do not perform as well. This suggests that simply having more players does not necessarily lead to better offensive outcomes.
+The scatter plot in @fig-playersVsPerformance shows the relationship between the number of players and team performance (goals + assists). There is a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
 
 ```{r}
 #| echo: false
