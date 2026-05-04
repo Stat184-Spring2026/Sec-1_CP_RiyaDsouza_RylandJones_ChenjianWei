@@ -160,7 +160,7 @@ ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
-The scatter plot in @fig-playersVsPerformance shows the relationship between the number of players and team performance (goals + assists). There is a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
+The scatter plot in @fig-players-vs-performance shows the relationship between the number of players and team performance (goals + assists). There is a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
 
 ```{r}
 #| echo: false
