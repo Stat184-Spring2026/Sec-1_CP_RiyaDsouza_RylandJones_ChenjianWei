@@ -96,8 +96,8 @@ After these steps, the dataset became cleaner, easier to understand, and ready f
 
 ```{r}
 #| echo: false
-#| label: fig-playersVsPerformance
-#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| label: fig-players-vs-performance
+#| fig-cap: "Performance (Goals + Assists) vs. Number of Players on Team"
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
@@ -123,7 +123,7 @@ ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
 
 ```{r}
 #| echo: false
-#| label: tbl-playersVsPerformance1
+#| label: tbl-players-vs-performance-1
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
@@ -159,7 +159,7 @@ kable(
 
 ```{r}
 #| echo: false
-#| label: tbl-playersVsPerformance2
+#| label: tbl-players-vs-performance-2
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
 corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
@@ -189,12 +189,12 @@ kable(
   )
 ```
 
-@tbl-playersVsPerformance1 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
+@tbl-players-vs-performance-1 provides a clearer comparison of the top 8 teams based on their average goals per match. England ranks highest with 2.60 goals per match, followed by Portugal and France, indicating strong offensive performance. On the other hand, Morocco has the lowest average, showing a more defensive or less efficient scoring style. Overall, the table highlights that performance differences between teams are quite noticeable, and factors beyond team size—such as strategy and player quality—likely play a more important role.
 
 ```{r}
 #| echo: false
-#| label: fig-ageVsPerformance
-#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| label: fig-age-vs-performance
+#| fig-cap: "Performance (Goals + Assists) vs. Average Age of Team"
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
@@ -224,7 +224,7 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
 
 ```{r}
 #| echo: false
-#| label: tbl-ageVsPerformance1
+#| label: tbl-age-vs-performance-1
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
@@ -260,20 +260,20 @@ kable(
 
 ```{r}
 #| echo: false
-#| label: tbl-ageVsPerformance2
+#| label: tbl-age-vs-performance-2
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
-corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
+corr <- cor(worldCupClean$age, worldCupClean$goals_plus_assists)
 
-model <- lm(goals_plus_assists ~ players, data = worldCupClean)
+model <- lm(goals_plus_assists ~ age, data = worldCupClean)
 
 simple_table <- data.frame(
-  Metric = c("Average Number of Players", 
+  Metric = c("Average Age", 
              "Average Goals + Assists", 
-             "Correlation (Number of Players vs Performance)", 
-             "Slope (Number of Players Effect)"),
+             "Correlation (Average Age vs Performance)", 
+             "Slope (Average Age Effect)"),
   
-  Value = c(round(avg_players, 2),
+  Value = c(round(avg_age, 2),
             round(avg_perf, 2),
             round(corr, 2),
             round(coef(model)[2], 2))
@@ -292,8 +292,8 @@ kable(
 
 ```{r}
 #| echo: false
-#| label: fig-possessionVsPerformance
-#| fig-cap: "Top 8 team Average goals per match by team number of players"
+#| label: fig-possession-vs-performance
+#| fig-cap: "Performance (Goals + Assists) vs. Team Possession Percentage"
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
@@ -317,7 +317,7 @@ ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
 
 ```{r}
 #| echo: false
-#| label: tbl-possessionVsPerformance1
+#| label: tbl-possession-vs-performance-1
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
@@ -353,7 +353,7 @@ kable(
 
 ```{r}
 #| echo: false
-#| label: tbl-possessionVsPerformance2
+#| label: tbl-possession-vs-performance-2
 #| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
 #| tbl-pos: H
 corr <- cor(worldCupClean$poss, worldCupClean$goals_plus_assists)
