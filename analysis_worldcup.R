@@ -10,8 +10,6 @@ library(rvest)
 library(kableExtra)
 library(readxl)
 library(janitor)
-library(dplyr)
-library(kableExtra)
 library(ggrepel)
 library(viridis)
 
