@@ -96,6 +96,12 @@ After these steps, the dataset became cleaner, easier to understand, and ready f
 
 This project uses an exploratory data analysis paradigm, since the goal is to examine World Cup data to identify patterns and trends in team performance rather than test a specific hypothesis. This approach was chosen because it allows for flexibility in analyzing the data and helps show insights through summary statistics and visualizations. For the coding work, a Tidyverse approach in R was used. This was chosen because it provides a clear and efficient workflow for data cleaning, transformation, and visualization. Tools like dplyr and ggplot2 make it easier to change the dataset and create meaningful visualizations, which supports the goals of exploratory analysis.
 
+## Cases and Variables
+
+In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament.
+The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance.
+Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
+
 ## Plot and Table
 
 ```{r}
