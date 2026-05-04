@@ -165,7 +165,7 @@ The scatter plot in @fig-playersVsPerformance shows the relationship between the
 ```{r}
 #| echo: false
 #| label: tbl-players-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Players and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_players <- mean(worldCupClean$players)
@@ -188,7 +188,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Number of Players</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -203,7 +202,7 @@ The table in @tbl-playersVsPerformance1 suggests a moderately positive correlati
 ```{r}
 #| echo: false
 #| label: tbl-players-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Number of Players vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$players, worldCupClean$goals_plus_assists)
 
@@ -222,8 +221,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of The Number of Players on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -271,7 +269,7 @@ The scatter plot in @fig-ageVsPerformance shows the relationship between average
 ```{r}
 #| echo: false
 #| label: tbl-age-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Average Age and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_age <- mean(worldCupClean$age)
@@ -294,7 +292,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Top World Cup Teams- Offensive Performance and Possession Compared to Average</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -309,7 +306,7 @@ The table in @tbl-ageVsPerformance1 shows how team performance compares to avera
 ```{r}
 #| echo: false
 #| label: tbl-age-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Average Age vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$age, worldCupClean$goals_plus_assists)
 
@@ -328,8 +325,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of The Number of Players on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -370,7 +366,7 @@ The scatter plot in @fig-possessionVsPerformance shows the relationship between 
 ```{r}
 #| echo: false
 #| label: tbl-possession-vs-performance-1
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "2022 World Cup Possession Percentage and Performance"
 #| tbl-pos: H
 avg_perf <- mean(worldCupClean$goals_plus_assists)
 avg_poss <- mean(worldCupClean$poss)
@@ -393,7 +389,6 @@ top_table <- worldCupClean %>%
 
 kable(
   top_table,
-  caption = "<span style='font-size:20px; font-weight:bold; color:black;'>Offensive Performance Compared to Possession Percentage</span>",
   escape = FALSE
 ) %>%
   kable_styling(
@@ -408,7 +403,7 @@ The table in @tbl-possessionVsPerformance1 shows how team performance compares t
 ```{r}
 #| echo: false
 #| label: tbl-possession-vs-performance-2
-#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-cap: "Possession Percentage vs Performance Summary"
 #| tbl-pos: H
 corr <- cor(worldCupClean$poss, worldCupClean$goals_plus_assists)
 
@@ -427,8 +422,7 @@ simple_table <- data.frame(
 )
 
 kable(
-  simple_table,
-  caption = "Impact of Possession on Offensive Performance",
+  simple_table
 ) %>%
   kable_styling(
     full_width = FALSE,
