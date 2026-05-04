@@ -92,6 +92,10 @@ Next, only important variables were kept, such as team name, age, matches played
 \
 After these steps, the dataset became cleaner, easier to understand, and ready for further analysis.
 
+## Methodology
+
+This project uses an exploratory data analysis paradigm, since the goal is to examine World Cup data to identify patterns and trends in team performance rather than test a specific hypothesis. This approach was chosen because it allows for flexibility in analyzing the data and helps show insights through summary statistics and visualizations. For the coding work, a Tidyverse approach in R was used. This was chosen because it provides a clear and efficient workflow for data cleaning, transformation, and visualization. Tools like dplyr and ggplot2 make it easier to change the dataset and create meaningful visualizations, which supports the goals of exploratory analysis.
+
 ## Plot and Table
 
 ```{r}
@@ -382,6 +386,10 @@ kable(
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
+
+## Data Source & Ethics
+
+The data used in this project comes from publicly available World Cup statistics, which were accessed and imported into R for analysis. The dataset is clearly structured and includes variables such as teams, goals, and performance variables, making it suitable for analysis. This dataset satisfies the FAIR principles in many ways. It is findable and accessible because it is publicly available online, and it is interoperable since it can be downloaded and used in formats compatible with R. Also, it is reuseable because the data is well organized and can be used for many different types of analyses. The dataset also aligns with the CARE principles, although it is in a less direct way. Since the data represents grouped team performance rather than individual information, there are less concerns relating to privacy or ethical issues. However, one limitation is that the dataset does not provide detailed context about how the data was collected or whether there are any biases in reporting, which makes it more difficult to fully assess its ethical implications.
 
 ## Conclusion
 
