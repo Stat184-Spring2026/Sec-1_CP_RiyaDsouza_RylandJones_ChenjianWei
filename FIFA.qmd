@@ -439,6 +439,9 @@ The data used in this project comes from publicly available World Cup statistics
 
 ## Conclusion
 
+This analysis analyzed how team level factors relate to performance in the 2022 FIFA World Cup. The results show that both possession and number of players have moderate positive relationships with goals and assists, suggesting that teams with greater control of the game and more players tend to perform better offensively. In contrast, average team age has a weak negative relationship with performance, indicating that age is not a strong predictor of success.
+However, these relationships are not strong and include several outliers, meaning that no single variable fully explains team performance. This suggests that success in the World Cup is influenced by a combination of factors beyond those included in this dataset.
+
 ## Reference
 
 “2022 World Cup Stats.” *FBref.com*, Sports Reference, <https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats>. Accessed 3 May 2026.
