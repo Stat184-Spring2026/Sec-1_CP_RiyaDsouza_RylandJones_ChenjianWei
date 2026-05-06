@@ -2,7 +2,7 @@
 title: "FIFA World Cup 2022 Analysis"
 subtitle: "Final Group Project"
 author: "Chenjian Wei, Riya Dsouza, Ryland Jones"
-date: "May 3, 2026"
+date: "May 6, 2026"
 format:
   pdf:
     toc: false
@@ -98,12 +98,10 @@ This project uses an exploratory data analysis paradigm, since the goal is to ex
 
 ## Cases and Variables
 
-In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament.
-The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance.
-Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
-
+In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament. The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance. Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
 
 ## Summary Statistics
+
 ```{r}
 #| echo: false
 #| label: tbl-descriptive-stats
@@ -131,6 +129,7 @@ worldCupClean %>%
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
+
 The summary statistics in @tbl-descriptive-stats give an overview of the dataset. On average, teams have about 9 goals plus assists, with a median of 7. The values range from 1 to 28, showing that team performance varies a lot. The standard deviation also shows there is a wide spread in performance. The average team age is about 27 years, the average number of players is around 21, and average possession is close to 49%. Overall, team characteristics are fairly similar, but performance differs across teams.
 
 ## Plot and Table
@@ -139,6 +138,7 @@ The summary statistics in @tbl-descriptive-stats give an overview of the dataset
 #| echo: false
 #| label: fig-players-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Number of Players on Team"
+#| fig-alt: "Scatter plot showing the relationship between number of players and team performance measured by goals and assists in the 2022 World Cup. France, Argentina, and Portugal had some of the highest performance values."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
@@ -232,11 +232,11 @@ kable(
 
 The table in @tbl-age-vs-performance-2 summarizes the relationship between average team age and performance. The correlation value of -0.24 indicates a weak negative relationship, meaning that teams with higher average ages tend to have slightly lower goals and assists. The negative slope further supports this trend, showing that performance generally decreases as average age increases. However, the relationship is not strong, and there are several teams that do not follow this pattern exactly.
 
-
 ```{r}
 #| echo: false
 #| label: fig-age-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Average Age of Team"
+#| fig-alt: "Scatter plot showing the relationship between number of players and team performance measured by goals and assists in the 2022 World Cup. France, Argentina, and Portugal had some of the highest performance values."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
@@ -340,6 +340,7 @@ The table in @tbl-age-vs-performance-2 summarizes the overall relationship betwe
 #| echo: false
 #| label: fig-possession-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Team Possession Percentage"
+#| fig-alt: "Scatter plot showing the relationship between possession percentage and team performance measured by goals and assists in the 2022 World Cup. Teams with higher possession percentages, such as France, England, and Argentina, generally had better performance."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
@@ -439,8 +440,7 @@ The data used in this project comes from publicly available World Cup statistics
 
 ## Conclusion
 
-This analysis analyzed how team level factors relate to performance in the 2022 FIFA World Cup. The results show that both possession and number of players have moderate positive relationships with goals and assists, suggesting that teams with greater control of the game and more players tend to perform better offensively. In contrast, average team age has a weak negative relationship with performance, indicating that age is not a strong predictor of success.
-However, these relationships are not strong and include several outliers, meaning that no single variable fully explains team performance. This suggests that success in the World Cup is influenced by a combination of factors beyond those included in this dataset.
+This analysis analyzed how team level factors relate to performance in the 2022 FIFA World Cup. The results show that both possession and number of players have moderate positive relationships with goals and assists, suggesting that teams with greater control of the game and more players tend to perform better offensively. In contrast, average team age has a weak negative relationship with performance, indicating that age is not a strong predictor of success. However, these relationships are not strong and include several outliers, meaning that no single variable fully explains team performance. This suggests that success in the World Cup is influenced by a combination of factors beyond those included in this dataset.
 
 ## Reference
 
