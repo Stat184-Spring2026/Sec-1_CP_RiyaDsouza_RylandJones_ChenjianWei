@@ -450,7 +450,7 @@ This analysis analyzed how team level factors relate to performance in the 2022 
 
 Chenjian Wei: part of plot and table, help build the qmd file
 Riya Dsouza: Created a graph and table, worked on the README, helped interpret the results and contributed to writing the final report.
-Ryland Jones: Tables, Plots, README
+Ryland Jones: Created graphs and tables, made updates to the README, interpreted results
 
 ## Code Appendix
 
