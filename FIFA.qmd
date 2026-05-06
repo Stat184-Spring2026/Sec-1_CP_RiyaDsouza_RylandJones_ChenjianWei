@@ -386,8 +386,8 @@ kable(
 ## Author Contributions
 
 Chenjian Wei:\
-Riyadsouza:\
-RylandJones:
+Riya Dsouza:\
+Ryland Jones: Tables, Plots, README
 
 ## Code Appendix
 
