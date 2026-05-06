@@ -197,7 +197,7 @@ kable(
   )
 ```
 
-The table in @tbl-playersVsPerformance1 suggests a moderately positive correlation between the number of players and team performance, meaning that teams with more players tend to have higher goals and assists. However, there are some outliers where teams do not follow this pattern.
+The table in @tbl-players-vs-performance-1 suggests a moderately positive correlation between the number of players and team performance, meaning that teams with more players tend to have higher goals and assists. However, there are some outliers where teams do not follow this pattern.
 
 ```{r}
 #| echo: false
@@ -230,7 +230,7 @@ kable(
   )
 ```
 
-The table in @tbl-playersVsPerformance2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are still some outliers, meaning not all teams follow this pattern exactly.
+The table in @tbl-players-vs-performance-2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are still some outliers, meaning not all teams follow this pattern exactly.
 
 
 ```{r}
@@ -264,7 +264,7 @@ ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
-The scatter plot in @fig-ageVsPerformance shows the relationship between average team age and team performance (goals + assists). The downward sloping line suggests a slightly negative relationship, meaning that teams with higher average ages tend to have lower performance. However, this trend is not very strong, as there are several teams that do not follow this pattern. For example, some teams with average ages around 27–28 still perform well. Overall, this suggests that age may have a small effect on performance, but it is not a major factor.
+The scatter plot in @fig-age-vs-performance shows the relationship between average team age and team performance (goals + assists). The downward sloping line suggests a slightly negative relationship, meaning that teams with higher average ages tend to have lower performance. However, this trend is not very strong, as there are several teams that do not follow this pattern. For example, some teams with average ages around 27–28 still perform well. Overall, this suggests that age may have a small effect on performance, but it is not a major factor.
 
 ```{r}
 #| echo: false
@@ -301,7 +301,7 @@ kable(
   )
 ```
 
-The table in @tbl-ageVsPerformance1 shows how team performance compares to average alongside team age. The top-performing teams, such as France, England, and Argentina, have ages close to the overall average, with only small differences. The “Age vs Avg” column shows that both higher and lower performing teams can have ages above or below the average. Overall, this suggests that team age does not have a strong or consistent impact on performance.
+The table in @tbl-age-vs-performance-1 shows how team performance compares to average alongside team age. The top-performing teams, such as France, England, and Argentina, have ages close to the overall average, with only small differences. The “Age vs Avg” column shows that both higher and lower performing teams can have ages above or below the average. Overall, this suggests that team age does not have a strong or consistent impact on performance.
 
 ```{r}
 #| echo: false
@@ -334,7 +334,7 @@ kable(
   )
 ```
 
-The table in @tbl-ageVsPerformance2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are some outliers where teams do not follow this pattern exactly.
+The table in @tbl-age-vs-performance-2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are some outliers where teams do not follow this pattern exactly.
 
 ```{r}
 #| echo: false
@@ -361,7 +361,7 @@ ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
-The scatter plot in @fig-possessionVsPerformance shows the relationship between possession percentage and team performance (goals + assists). The upward sloping line indicates a positive relationship, meaning that teams with higher possession tend to have higher offensive performance. Several top-performing teams, such as France, England, and Portugal, have relatively high possession values. However, there are still some teams that do not follow this pattern exactly. Overall, this suggests that possession is moderately associated with better performance.
+The scatter plot in @fig-possession-vs-performance shows the relationship between possession percentage and team performance (goals + assists). The upward sloping line indicates a positive relationship, meaning that teams with higher possession tend to have higher offensive performance. Several top-performing teams, such as France, England, and Portugal, have relatively high possession values. However, there are still some teams that do not follow this pattern exactly. Overall, this suggests that possession is moderately associated with better performance.
 
 ```{r}
 #| echo: false
@@ -398,7 +398,7 @@ kable(
   )
 ```
 
-The table in @tbl-possessionVsPerformance1 shows how team performance compares to average alongside possession percentage. The top-performing teams, such as France, England, and Argentina, generally have possession values above or close to the average. The “Possession vs Avg” column shows that teams with higher possession often perform above average, while teams with lower possession tend to perform worse. Overall, this supports a moderately positive relationship between possession and offensive performance.
+The table in @tbl-possession-vs-performance-1 shows how team performance compares to average alongside possession percentage. The top-performing teams, such as France, England, and Argentina, generally have possession values above or close to the average. The “Possession vs Avg” column shows that teams with higher possession often perform above average, while teams with lower possession tend to perform worse. Overall, this supports a moderately positive relationship between possession and offensive performance.
 
 ```{r}
 #| echo: false
@@ -431,7 +431,7 @@ kable(
   )
 ```
 
-The table in @tbl-possessionVsPerformance2 summarizes the overall relationship between possession and team performance. The correlation value of 0.43 indicates a moderately positive relationship, meaning that teams with higher possession tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as possession increases. Overall, this suggests that possession has a moderate influence on offensive performance.
+The table in @tbl-possession-vs-performance-2 summarizes the overall relationship between possession and team performance. The correlation value of 0.43 indicates a moderately positive relationship, meaning that teams with higher possession tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as possession increases. Overall, this suggests that possession has a moderate influence on offensive performance.
 
 ## Data Source & Ethics
 
