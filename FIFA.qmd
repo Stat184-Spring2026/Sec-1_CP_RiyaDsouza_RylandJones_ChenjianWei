@@ -1,6 +1,177 @@
 ---
 title: "FIFA World Cup 2022 Analysis"
 subtitle: "Final Group Project"
+author: "Chenjian Wei, Riyadsouza, RylandJones"
+date: "May 3, 2026"
+format:
+  pdf:
+    toc: false
+    number-sections: true
+    colorlinks: true
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(gt)
+
+worldCupRaw <- read_xlsx("worldCup2022.xlsx")
+
+worldCupClean <- worldCupRaw |>
+  clean_names() |>
+  filter(
+    !is.na(squad),
+    squad != "Squad",
+    !str_detect(squad, "Playing")
+  ) |>
+  select(
+    squad,
+    players = number_pl,
+    age,
+    poss,
+    matches_played = mp,
+    starts,
+    minutes = min,
+    nineties = x90s,
+    goals = gls_9,
+    assists = ast_10,
+    goals_plus_assists = g_a_11,
+    goals_no_pk = g_pk_12,
+    pk,
+    pkatt = p_katt,
+    yellow_cards = crd_y,
+    red_cards = crd_r
+  )
+
+top8 <- worldCupClean |>
+  filter(matches_played >= 5) |>
+  mutate(
+    goals = as.numeric(goals),
+    matches_played = as.numeric(matches_played),
+    age = as.numeric(age),
+    avg_goals = goals / matches_played
+  )
+
+```
+
+## Introduction
+
+This project uses player level data from the 2022 FIFA World Cup to examine how different performance variables relate to overall effectiveness. In addition to analyzing raw statistics like goals, assists, and minutes played, we will also use per-90 metrics to allow for fair comparisons between players with different playing time. The project involves cleaning and organizing the dataset, generating visualizations to compare players and trends, and computing summary statistics to identify relationships between variables.
+
+## Tidy data
+
+The dataset was cleaned to follow tidy data principles, where each variable is a column and each row represents a team.\
+\
+First, \`clean_names()\` was used to make all column names consistent and easier to use. Then, unnecessary rows were removed, including rows with missing team names and rows that were not actual teams, such as those labeled "Squad" or "Playing".\
+\
+Next, only important variables were kept, such as team name, age, matches played, and goals. Some columns were also renamed to make them more clear, for example, \`mp\` was renamed to \`matches_played\` and \`gls_9\` to \`goals\`.\
+\
+After these steps, the dataset became cleaner, easier to understand, and ready for further analysis.
+
+## Plot and Table
+
+```{r}
+#| echo: false
+#| label: fig-age-goals
+#| fig-cap: "Top 8 team Average goals per match by team average age"
+#| fig-pos: H
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(ggplot2)
+
+worldCupRaw <- read_xlsx("worldCup2022.xlsx")
+
+worldCupClean <- worldCupRaw |>
+  clean_names() |>
+  filter(
+    !is.na(squad),
+    squad != "Squad",
+    !str_detect(squad, "Playing")
+  ) |>
+  select(
+    squad,
+    age,
+    matches_played = mp,
+    goals = gls_9
+  )
+
+top8 <- worldCupClean |>
+  filter(matches_played >= 5) |>
+  mutate(
+    goals = as.numeric(goals),
+    matches_played = as.numeric(matches_played),
+    age = as.numeric(age),
+    avg_goals = goals / matches_played
+  )
+
+ggplot(top8, aes(x = age, y = avg_goals, color = squad)) +
+  geom_point(size = 4) +
+  labs(
+    x = "Average Age",
+    y = "Goals per Match",
+    color = "Country"
+  ) +
+  theme_minimal()
+```
+
+@fig-age-goals illustrates the relationship between average team age and goals per match. The scatter plot suggests that there is no clear linear relationship between age and scoring performance. While some older teams achieve high scoring rates, others do not, indicating that age alone is not a strong predictor of offensive success.
+
+These results suggest that additional factors, such as team strategy, player skill, and match conditions, may play a more important role in determining scoring performance than average age alone.
+
+```{r}
+#| echo: false
+#| label: tbl-top8
+#| tbl-cap: "Top 8 World Cup Teams – Average Goals Performance"
+#| tbl-pos: H
+
+top8 |>
+  mutate(Rank = row_number()) |>
+  select(Rank, squad, age, avg_goals) |>
+  gt() |>
+  cols_label(
+    squad = "Team",
+    age = "Age",
+    avg_goals = "Goals per Match"
+  ) |>
+  tab_header(
+    title = "Top 8 World Cup Teams"
+  ) |>
+  fmt_number(
+    columns = c(age, avg_goals),
+    decimals = 2
+  ) |>
+  cols_align(align = "center") |>
+  opt_row_striping()
+```
+
+@tbl-top8 summarizes the key statistics for the selected teams that played at least five matches in the 2022 FIFA World Cup. The table presents team average age and goals per match, allowing for comparison across teams with different levels of performance.
+
+Overall, teams such as England and France show relatively high goals per match, while others like Croatia and Morocco demonstrate lower scoring output. This variation highlights differences in offensive effectiveness among the top-performing teams.
+
+## Conclusion
+
+## Reference
+
+“2022 World Cup Stats.” *FBref.com*, Sports Reference, <https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats>. Accessed 3 May 2026.
+
+## Author Contributions
+
+Chenjian Wei:\
+Riyadsouza:\
+RylandJones:
+
+## Code Appendix
+---
+title: "FIFA World Cup 2022 Analysis"
+subtitle: "Final Group Project"
 author: "Chenjian Wei, Riya Dsouza, Ryland Jones"
 date: "May 3, 2026"
 format:
@@ -98,12 +269,10 @@ This project uses an exploratory data analysis paradigm, since the goal is to ex
 
 ## Cases and Variables
 
-In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament.
-The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance.
-Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
-
+In this dataset, a case represents a single World Cup team. Each row corresponds to one team and summarizes its performance statistics during the tournament. The case attributes are the variables that describe each team’s performance. These include variables such as total goals scored, goals per 90 minutes, matches played, and other performance related statistics. These attributes are quantitative and are used to compare teams and to identify any patterns in performance. Where applicable, the units of measurement are defined. For example, goals are counted as totals, and goals per 90 minutes adjust for playing time so teams can be compared fairly. These variables help analyze and compare team performance.
 
 ## Summary Statistics
+
 ```{r}
 #| echo: false
 #| label: tbl-descriptive-stats
@@ -131,6 +300,7 @@ worldCupClean %>%
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
+
 The summary statistics in @tbl-descriptive-stats give an overview of the dataset. On average, teams have about 9 goals plus assists, with a median of 7. The values range from 1 to 28, showing that team performance varies a lot. The standard deviation also shows there is a wide spread in performance. The average team age is about 27 years, the average number of players is around 21, and average possession is close to 49%. Overall, team characteristics are fairly similar, but performance differs across teams.
 
 ## Plot and Table
@@ -139,6 +309,7 @@ The summary statistics in @tbl-descriptive-stats give an overview of the dataset
 #| echo: false
 #| label: fig-players-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Number of Players on Team"
+#| fig-alt: "Scatter plot showing the relationship between number of players and goals plus assists for World Cup teams. The plot indicates a positive trend, with teams having more players generally achieving higher offensive performance. France, England, and Argentina appear among the highest performers, while teams like Morocco and Brazil show moderate results despite higher player counts."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
@@ -160,7 +331,7 @@ ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
   theme_minimal()
 ```
 
-The scatter plot in @fig-players-vs-performance shows the relationship between the number of players and team performance (goals + assists). There is a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
+The scatter plot in \@fig-players-vs-performance shows the relationship between the number of players and team performance (goals + assists). There appears to be a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
 
 ```{r}
 #| echo: false
@@ -230,13 +401,13 @@ kable(
   )
 ```
 
-The table in @tbl-age-vs-performance-2 summarizes the relationship between average team age and performance. The correlation value of -0.24 indicates a weak negative relationship, meaning that teams with higher average ages tend to have slightly lower goals and assists. The negative slope further supports this trend, showing that performance generally decreases as average age increases. However, the relationship is not strong, and there are several teams that do not follow this pattern exactly.
-
+The table in @tbl-players-vs-performance-2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are still some outliers, meaning not all teams follow this pattern exactly.
 
 ```{r}
 #| echo: false
 #| label: fig-age-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Average Age of Team"
+#| fig-alt: "Scatter plot showing the relationship between average team age and goals plus assists for World Cup teams. The plot indicates a slight negative trend, suggesting that teams with higher average age tend to have lower offensive performance. France and England appear among the highest performers, while several older teams show lower values."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
@@ -340,6 +511,7 @@ The table in @tbl-age-vs-performance-2 summarizes the overall relationship betwe
 #| echo: false
 #| label: fig-possession-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Team Possession Percentage"
+#| fig-alt: "Scatter plot showing the relationship between team possession percentage and goals plus assists for World Cup teams. The plot indicates a positive trend, suggesting that teams with higher possession tend to have better offensive performance. France, England, and Argentina are among the top performers, while teams with lower possession generally show lower output."
 #| fig-pos: H
 #| fig-height: 5
 ggplot(worldCupClean, aes(x = poss, y = goals_plus_assists, color = squad)) +
@@ -439,9 +611,6 @@ The data used in this project comes from publicly available World Cup statistics
 
 ## Conclusion
 
-This analysis analyzed how team level factors relate to performance in the 2022 FIFA World Cup. The results show that both possession and number of players have moderate positive relationships with goals and assists, suggesting that teams with greater control of the game and more players tend to perform better offensively. In contrast, average team age has a weak negative relationship with performance, indicating that age is not a strong predictor of success.
-However, these relationships are not strong and include several outliers, meaning that no single variable fully explains team performance. This suggests that success in the World Cup is influenced by a combination of factors beyond those included in this dataset.
-
 ## Reference
 
 “2022 World Cup Stats.” *FBref.com*, Sports Reference, <https://fbref.com/en/comps/1/2022/2022-World-Cup-Stats>. Accessed 3 May 2026.
@@ -461,3 +630,5 @@ RylandJones:
 #| eval: false
 
 ```
+
+
