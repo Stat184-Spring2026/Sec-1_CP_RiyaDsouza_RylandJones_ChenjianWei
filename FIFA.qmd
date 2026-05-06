@@ -449,8 +449,8 @@ This analysis analyzed how team level factors relate to performance in the 2022 
 ## Author Contributions
 
 Chenjian Wei:\
-Riyadsouza:\
-RylandJones:
+Riya Dsouza:\
+Ryland Jones: Tables, Plots, README
 
 ## Code Appendix
 
