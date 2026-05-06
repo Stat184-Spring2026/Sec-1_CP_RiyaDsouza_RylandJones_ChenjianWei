@@ -230,7 +230,7 @@ kable(
   )
 ```
 
-The table in @tbl-players-vs-performance-2 summarizes the overall relationship between the number of players and team performance. The correlation value of 0.51 indicates a moderately positive relationship, meaning that teams with more players tend to have higher goals and assists. The positive slope further supports this trend, showing that performance generally increases as the number of players increases. However, there are still some outliers, meaning not all teams follow this pattern exactly.
+The table in @tbl-age-vs-performance-2 summarizes the relationship between average team age and performance. The correlation value of -0.24 indicates a weak negative relationship, meaning that teams with higher average ages tend to have slightly lower goals and assists. The negative slope further supports this trend, showing that performance generally decreases as average age increases. However, the relationship is not strong, and there are several teams that do not follow this pattern exactly.
 
 
 ```{r}
