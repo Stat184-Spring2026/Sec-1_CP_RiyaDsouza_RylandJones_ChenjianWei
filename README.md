@@ -4,7 +4,7 @@ This repository analyzes team performance in the 2022 FIFA World Cup using FBref
 
 ## Overview
 
-This project uses team level data from the 2022 FIFA World Cup to examine how different performance variables relate to overall effectiveness. In addition to analyzing raw statistics like goals, assists, and minutes played, we will also use per 90 metrics to allow for fair comparisons between players with different playing time. The project involves cleaning and organizing the dataset, generating visualizations to compare players and trends, and computing summary statistics to identify relationships between variables. 
+This project uses team level data from the 2022 FIFA World Cup to examine how different performance variables relate to overall effectiveness. We will compare performance (goals and assists) to variables such as the number of players, average age, and possession percentage to analyze which has the most effect. The project involves cleaning and organizing the dataset, generating visualizations to compare players and trends, and computing summary statistics to identify relationships between variables. 
 
 ### Interesting Insight
 
