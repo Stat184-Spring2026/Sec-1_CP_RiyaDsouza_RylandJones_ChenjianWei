@@ -269,36 +269,36 @@ The table in @tbl-age-vs-performance-2 summarizes the relationship between avera
 ```{r}
 #| echo: false
 #| label: fig-age-vs-performance
-#| fig-cap: "Performance (Goals + Assists) vs. Average Age of Team"
-#| fig-alt: "Scatter plot showing the relationship between number of players and team performance measured by goals and assists in the 2022 World Cup. France, Argentina, and Portugal had some of the highest performance values."
+#| fig-cap: "Goals + Assists by Team Age Group"
+#| fig-alt: "Boxplot comparing goals plus assists for teams with above-average and below-average team age."
 #| fig-pos: H
 #| fig-height: 5
-ggplot(worldCupClean, aes(x = age, y = goals_plus_assists, color = squad)) +
-  
-  geom_point(size = 3) +
-  
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
-  
+
+worldCupClean <- worldCupClean %>%
+  mutate(
+    age_group = ifelse(
+      age > mean(age, na.rm = TRUE),
+      "Above Average Age",
+      "Below Average Age"
+    )
+  )
+
+ggplot(worldCupClean,
+       aes(x = age_group,
+           y = goals_plus_assists,
+           fill = age_group)) +
+  geom_boxplot() +
   labs(
-    title = "Age vs Performance",
-    x = "Average Team Age",
+    title = "Goals + Assists by Team Age Group",
+    x = "Team Age Group",
     y = "Goals + Assists",
-    color = "Team"
+    fill = "Age Group"
   ) +
-  
-  geom_text_repel(
-    data = worldCupClean %>% slice_max(goals_plus_assists, n = 10),
-    aes(label = squad),
-    size = 4,
-    max.overlaps = Inf
-  ) +
-  
-  scale_color_viridis_d(option = "D") +
-  
   theme_minimal()
 ```
 
-The scatter plot in @fig-age-vs-performance shows the relationship between average team age and team performance (goals + assists). The downward sloping line suggests a slightly negative relationship, meaning that teams with higher average ages tend to have lower performance. However, this trend is not very strong, as there are several teams that do not follow this pattern. For example, some teams with average ages around 27–28 still perform well. Overall, this suggests that age may have a small effect on performance, but it is not a major factor.
+The boxplot in @fig-age-vs-performance compares team performance between teams with above average and below average ages. Teams with below average ages generally show slightly higher offensive performance, which can be seen by the higher median and wider spread of goals and assists. However, there is still overlap between the two groups, which suggests that age alone is not a strong predictor of team success. Overall, age may have some influence on performance, but other factors likely play a larger role.
+
 
 ```{r}
 #| echo: false
