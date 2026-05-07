@@ -138,29 +138,63 @@ The summary statistics in @tbl-descriptive-stats give an overview of the dataset
 #| echo: false
 #| label: fig-players-vs-performance
 #| fig-cap: "Performance (Goals + Assists) vs. Number of Players on Team"
-#| fig-alt: "Scatter plot showing the relationship between number of players and team performance measured by goals and assists in the 2022 World Cup. France, Argentina, and Portugal had some of the highest performance values."
+#| fig-alt: "Horizontal grouped bar chart comparing the number of players and team performance (goals plus assists) for top 2022 FIFA World Cup teams. Blue bars represent the number of players, while orange bars represent goals plus assists. France had the highest overall performance, followed by Argentina and Portugal. Most teams had between 20 and 26 players, while performance values ranged from around 10 to 28.."
 #| fig-pos: H
 #| fig-height: 5
-ggplot(worldCupClean, aes(x = players, y = goals_plus_assists, color = squad)) +
-  geom_point(size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
+topTeams <- worldCupClean %>%
+  slice_max(goals_plus_assists, n = 10) %>%
+  select(squad, players, goals_plus_assists) %>%
+  pivot_longer(
+    cols = c(players, goals_plus_assists),
+    names_to = "metric",
+    values_to = "value"
+  )
+
+ggplot(topTeams,
+       aes(x = reorder(squad, value),
+           y = value,
+           fill = metric)) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  coord_flip() +
   labs(
-    title = "Number of Players vs Performance",
-    x = "Number of Players",
-    y = "Goals + Assists",
-    color = "Team"
+    title = "Players vs Performance by Team",
+    x = "Team",
+    y = "Value",
+    fill = "Metric"
   ) +
-  geom_text_repel(
-    data = worldCupClean %>% slice_max(goals_plus_assists, n = 10),
-    aes(label = squad),
-    size = 4,
-    max.overlaps = Inf
+  scale_fill_manual(
+    values = c(
+      "goals_plus_assists" = "tomato",
+      "players" = "steelblue"
+    )
   ) +
-  scale_color_viridis_d(option = "D") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(
+      size = 20,
+      face = "bold"
+    ),
+    axis.title = element_text(
+      size = 14,
+      face = "bold"
+    ),
+    axis.text = element_text(
+      size = 12
+    ),
+    legend.title = element_text(
+      size = 13,
+      face = "bold"
+    ),
+    legend.text = element_text(
+      size = 11
+    )
+  )
 ```
 
-The scatter plot in @fig-players-vs-performance shows the relationship between the number of players and team performance (goals + assists). There is a slight positive trend, as shown by the upward sloping line, but the relationship is not very strong. Some teams with a moderate number of players, such as England and Portugal, have high performance, while others with more players do not perform as well. Overall, this suggests that having more players does not necessarily lead to better offensive performance.
+The grouped bar chart in @fig-players-vs-performance compares the number of players and goals plus assists for several teams in the 2022 FIFA World Cup. The blue bars show the number of players on each team, and the orange bars show team performance based on goals and assists. France had the highest performance, while Argentina and Portugal also performed well. Some teams, like Brazil and Morocco, had many players but lower goals and assists compared to other teams. This shows that having a larger number of players does not always mean the team will have better offensive performance.
 
 ```{r}
 #| echo: false
